@@ -3,26 +3,40 @@ import React from 'react';
 
 class Button extends React.Component {
   render() {
-    const val = this.props.val;
     return (
-      <button onClick={(_e) => { this.props.input(val) }}>{val}</button>
+      <Context.Consumer>
+        {
+          (obj) => {
+            return <button onClick={(_e) => { obj.input(this.props.val) }}>{this.props.val}</button>
+          }
+        }
+      </Context.Consumer>
     );
   }
 }
 
 class SpecialButton extends React.Component {
   render() {
-    const val = this.props.val;
-    let inpVal;
-    if (val === 'C') {
-      inpVal = "";
-    }
-    else {
-      console.log(this.props.dispVal)
-      inpVal = eval(this.props.dispVal);
-    }
     return (
-      <button onClick={(_e) => { this.props.updateDisp(inpVal) }}>{val}</button>
+      <Context.Consumer>
+        {
+          (obj) => {
+            let inpVal;
+            if (this.props.val === 'C') {
+              inpVal = "";
+            }
+            else {
+              try {
+                // eslint-disable-next-line no-eval
+                inpVal = eval(obj.dispVal);
+              }
+              catch (e) {
+                inpVal = 'error'
+              }
+            }
+            return (<button onClick={(_e) => { obj.updateDisp(inpVal) }}>{this.props.val}</button>)
+          }}
+      </Context.Consumer>
     )
   }
 
@@ -31,36 +45,33 @@ class SpecialButton extends React.Component {
 
 class ButtonSpace extends React.Component {
   render() {
-    let input = this.props.input;
-    let updateDisp = this.props.updateDisp;
-    let dispVal = this.props.val;
     return (
       <table>
         <thead></thead>
         <tbody>
           <tr>
-            <td><Button val={1} input={input} /></td>
-            <td><Button val={2} input={input} /></td>
-            <td><Button val={3} input={input} /></td>
-            <td><Button val={'+'} input={input} /></td>
+            <td><Button val={'1'} /></td>
+            <td><Button val={'2'} /></td>
+            <td><Button val={'3'} /></td>
+            <td><Button val={'+'} /></td>
           </tr>
           <tr>
-            <td><Button val={4} input={input} /></td>
-            <td><Button val={5} input={input} /></td>
-            <td><Button val={6} input={input} /></td>
-            <td><Button val={'-'} input={input} /></td>
+            <td><Button val={'4'} /></td>
+            <td><Button val={'5'} /></td>
+            <td><Button val={'6'} /></td>
+            <td><Button val={'-'} /></td>
           </tr>
           <tr>
-            <td><Button val={7} input={input} /></td>
-            <td><Button val={8} input={input} /></td>
-            <td><Button val={9} input={input} /></td>
-            <td><Button val={'*'} input={input} /></td>
+            <td><Button val={'7'} /></td>
+            <td><Button val={'8'} /></td>
+            <td><Button val={'9'} /></td>
+            <td><Button val={'*'} /></td>
           </tr>
           <tr>
-            <td><Button val={0} input={input} /></td>
-            <td><SpecialButton val={'C'} updateDisp={updateDisp} dispVal={dispVal} /></td>
-            <td><SpecialButton val={'='} updateDisp={updateDisp} dispVal={dispVal} /></td>
-            <td><Button val={'/'} input={input} /></td>
+            <td><Button val={0} /></td>
+            <td><SpecialButton val={'C'} /></td>
+            <td><SpecialButton val={'='} /></td>
+            <td><Button val={'/'} /></td>
           </tr>
         </tbody>
         <tfoot></tfoot>
@@ -77,7 +88,9 @@ class Screen extends React.Component {
   }
 }
 
-class Calculator extends React.Component {
+const Context = React.createContext();
+
+class App extends React.Component {
 
   constructor(props) {
     super(props);
@@ -91,21 +104,36 @@ class Calculator extends React.Component {
   }
 
   input = (val) => {
+    if (this.state.dispVal === 'error') {
+      this.setState((prevState, currProps) => ({
+        dispVal: ""
+      }));
+    }
+
     this.setState((prevState, currProps) => ({
       dispVal: prevState.dispVal + val
     }));
   }
 
+
   render() {
     return (
       <div className="parent">
+
         <h2>React Calc. App</h2><br />
+
         <Screen val={this.state.dispVal} />
-        <ButtonSpace input={this.input} updateDisp={this.updateDisp} val={this.state.dispVal} />
+
+        <Context.Provider value={{ input: this.input, updateDisp: this.updateDisp, dispVal: this.state.dispVal }}>
+
+          <ButtonSpace />
+
+        </Context.Provider>
+
       </div>
     );
   }
 
 }
 
-export default Calculator;
+export default App;
