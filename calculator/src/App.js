@@ -99,8 +99,8 @@ class Button extends React.Component {
     return (
       <Context.Consumer>
         {
-          (obj) => {
-            return <button onClick={(_e) => { obj.input(this.props.val) }}>{this.props.val}</button>
+          (Contextobj) => {
+            return <button onClick={(_e) => { Contextobj.input(this.props.val) }}>{this.props.val}</button>
           }
         }
       </Context.Consumer>
@@ -113,7 +113,7 @@ class SpecialButton extends React.Component {
     return (
       <Context.Consumer>
         {
-          (obj) => {
+          (Contextobj) => {
             let inpVal;
             if (this.props.val === 'C') {
               inpVal = "";
@@ -121,13 +121,13 @@ class SpecialButton extends React.Component {
             else {
               try {
                 // eslint-disable-next-line no-eval
-                inpVal = eval(obj.dispVal);
+                inpVal = eval(Contextobj.dispVal);
               }
               catch (e) {
                 inpVal = 'error'
               }
             }
-            return (<button onClick={(_e) => { obj.updateDisp(inpVal) }}>{this.props.val}</button>)
+            return (<button onClick={(_e) => { Contextobj.updateDisp(inpVal) }}>{this.props.val}</button>)
           }}
       </Context.Consumer>
     )
