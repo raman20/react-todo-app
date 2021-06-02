@@ -1,4 +1,4 @@
-# Getting Started with Create React App
+# About
 
 The famous tic tac toe game.
 
