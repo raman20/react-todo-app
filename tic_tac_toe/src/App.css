@@ -10,6 +10,4 @@
 
 .board-row {
   display: table;
-  clear: both;
-  content: "";
 }
