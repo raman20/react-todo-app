@@ -1,1 +1,1 @@
-# This repo contains my all of my react js apps
+# This repo contains all of my react js apps
