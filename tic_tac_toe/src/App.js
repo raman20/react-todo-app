@@ -71,7 +71,6 @@ class App extends React.Component {
     render() {
         return (
             <div className="App">
-                <h1> The <u>TIC TAC TOE</u> Game</h1>
                 <Context.Provider value={{ next: this.state.next, winner: this.state.winner, updateBoard: this.updateBoard, board: this.state.board }}>
                     <Board />
                     <PlayerIndicator player={this.state.next} />
