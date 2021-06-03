@@ -6,7 +6,7 @@ class TodoListRow extends React.Component {
 		const row = this.props.tasks.map((item, index) => {
 			return (
 				<tr key={index}>
-					<td>{item}	<button onClick={() => {this.props.deleteTasks(index);}}>delete</button></td>
+					<td>{item}	<button onClick={() => {this.props.deleteTasks(index);}}> X </button></td>
 				</tr>
 			);
 		});
